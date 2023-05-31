@@ -11,6 +11,7 @@ import com.atguigu.service.RoleService;
 import com.atguigu.util.QiniuUtils;
 import com.github.pagehelper.PageInfo;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -52,6 +53,7 @@ public class AdminController extends BaseController {
     private final static String PAGE_UPLOED_SHOW = "admin/upload";
     private final static String PAGE_ASSGIN_SHOW = "admin/assginShow";
 
+    @PreAuthorize("hasAuthority('admin.show')")
     @RequestMapping
     public String index(ModelMap model, HttpServletRequest request) {
         Map<String,Object> filters = getFilters(request);
@@ -68,6 +70,7 @@ public class AdminController extends BaseController {
      * @param
      * @return
      */
+    @PreAuthorize("hasAuthority('admin.create')")
     @GetMapping("/create")
     public String create() {
         return PAGE_CREATE;
@@ -81,7 +84,7 @@ public class AdminController extends BaseController {
      * @param
      * @return
      */
-
+    @PreAuthorize("hasAuthority('admin.create')")
     @PostMapping("/save")
     public String save(Admin admin) {
         //设置默认头像
@@ -99,6 +102,7 @@ public class AdminController extends BaseController {
      * @param id
      * @return
      */
+    @PreAuthorize("hasAuthority('admin.edit')")
     @GetMapping("/edit/{id}")
     public String edit(ModelMap model,@PathVariable Long id) {
         Admin admin = adminService.getById(id);
@@ -113,6 +117,7 @@ public class AdminController extends BaseController {
      * @param
      * @return
      */
+    @PreAuthorize("hasAuthority('admin.edit')")
     @PostMapping(value="/update")
     public String update(Admin admin) {
 
@@ -126,12 +131,14 @@ public class AdminController extends BaseController {
      * @param id
      * @return
      */
+    @PreAuthorize("hasAuthority('admin.delete')")
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
         adminService.delete(id);
         return LIST_ACTION;
     }
 
+    @PreAuthorize("hasAuthority('admin.edit')")
     @RequestMapping("/uploadShow/{id}")
     public String uploadShow(@PathVariable("id") Long id,ModelMap modelMap ){
         modelMap.addAttribute("id",id);
@@ -140,7 +147,7 @@ public class AdminController extends BaseController {
 
     }
 
-
+    @PreAuthorize("hasAuthority('admin.edit')")
     @RequestMapping("/upload/{id}")
     public String upload(@PathVariable("id") Long id, MultipartFile file) throws IOException {
             String newFileName= UUID.randomUUID().toString();
@@ -153,18 +160,15 @@ public class AdminController extends BaseController {
 
         return PAGE_SUCCESS;
     }
-
+    @PreAuthorize("hasAuthority('admin.assgin')")
     @GetMapping("/assignShow/{adminId}")
     public String assignShow(@PathVariable Long adminId,ModelMap modelMap){
-//        List<Role> roles = roleService.findAll();
-//        HashMap<String, Object> roleMap = new HashMap<>();
-//        roleMap.put("noAssginRoleList",roles);
         Map<String, Object> roleMap = adminService.findRoleByAdminId(adminId);
         modelMap.addAllAttributes(roleMap);
         modelMap.addAttribute("adminId",adminId);
-        return "admin/assginShow";
+        return PAGE_ASSGIN_SHOW;
     }
-
+    @PreAuthorize("hasAuthority('admin.assgin')")
     @RequestMapping("/assignRole")
     public String assignRole(Long adminId,Long[] roleIds){
 

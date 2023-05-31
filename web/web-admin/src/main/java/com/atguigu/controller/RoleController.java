@@ -7,6 +7,7 @@ import com.atguigu.service.PermissionService;
 import com.atguigu.service.RoleService;
 import com.github.pagehelper.PageInfo;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -48,6 +49,7 @@ public class RoleController  extends BaseController {
      * @param model
      * @return
      */
+    @PreAuthorize("hasAuthority('role.show')")
     @RequestMapping
     public String index(ModelMap model,HttpServletRequest request)  {
 
@@ -60,12 +62,13 @@ public class RoleController  extends BaseController {
         return PAGE_INDEX;
     }
 
+    @PreAuthorize("hasAuthority('role.create')")
     @GetMapping("/create")
     public String create(Model model){
         return PAGE_CREATE;
     }
 
-
+    @PreAuthorize("hasAuthority('role.create')")
     @PostMapping ("/save")
     public String save(Role role, HttpServletRequest request){
 
@@ -73,6 +76,7 @@ public class RoleController  extends BaseController {
         return PAGE_SUCCESS;
     }
 
+    @PreAuthorize("hasAuthority('role.edit')")
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id,Model model){
         Role role = roleService.getById(id);
@@ -80,18 +84,19 @@ public class RoleController  extends BaseController {
         return PAGE_EDIT;
     }
 
-
+    @PreAuthorize("hasAuthority('role.edit')")
    @PostMapping("/update")
     public String update( Role role){
         roleService.update(role);
         return PAGE_SUCCESS;
    }
-
+    @PreAuthorize("hasAuthority('role.delete')")
    @GetMapping("/delete/{id}")
     public String deleteRole(@PathVariable Long id){
         roleService.delete(id);
        return "redirect:/role";
    }
+   @PreAuthorize("hasAuthority('role.assgin')")
     @GetMapping("/assignShow/{roleId}")
     public String assignShow(ModelMap model,@PathVariable Long roleId){
 
@@ -102,7 +107,7 @@ public class RoleController  extends BaseController {
         return PAGE_ASSGIN_SHOW;
     }
 
-
+    @PreAuthorize("hasAuthority('role.assgin')")
     @PostMapping("/assignPermission")
     public String assignPermission(Long roleId, Long[] permissionIds){
         permissionService.saveRolePermissionRealtionShip(roleId, permissionIds);
