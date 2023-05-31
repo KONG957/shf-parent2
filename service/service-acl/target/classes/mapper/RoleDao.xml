@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.dao.RoleDao">
+
+    <!--查询所有-->
+    <select id="findAll" resultType="role">
+        select *
+        from acl_role
+        where is_deleted = 0
+    </select>
+
+    <!--
+    useGeneratedKeys设置为 true 时，表示如果插入的表id以自增列为主键，则允许 JDBC 支持自动生成主键，并可将自动生成的主键id返回。
+    useGeneratedKeys参数只针对 insert 语句生效，默认为 false；
+    -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into acl_role (
+            id ,
+            role_name ,
+            role_code ,
+            description
+        ) values (
+                  #{id},
+                  #{roleName},
+                  #{roleCode},
+                  #{description}
+                         )
+
+    </insert>
+    
+    <select id="getById" resultType="role">
+        select id, role_name,role_code,description from acl_role where id=#{id}
+    </select>
+<!--修改操作-->
+    <update id="update" >
+        update  acl_role  set role_name = #{roleName} ,role_code=#{roleCode},description=#{description} where id=#{id}
+    </update>
+
+    <!--删除操作-->
+    <update id="delete">
+        update acl_role set is_deleted=1 where id=#{id}
+    </update>
+
+    <!--分页加上根据名字搜索-->
+    <select id="findPage" resultType="role">
+        select *from acl_role
+            <where>
+                <if test="roleName!=null and roleName!=''">
+                    and role_name=#{roleName}
+                </if>
+                and is_deleted=0
+            </where>
+            order by id desc
+    </select>
+</mapper>
