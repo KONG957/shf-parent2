@@ -36,6 +36,7 @@ public class IndexController {
 
     private final static String PAGE_INDEX = "frame/index";
     private final static String PAGE_MAIN = "frame/main";
+    private final static String PAGE_AUTH     = "frame/auth";
 
 
     @RequestMapping("/login")
@@ -60,6 +61,11 @@ public class IndexController {
         return PAGE_MAIN;
     }
 
+    @RequestMapping("/auth")
+    public String auth(){
+
+        return PAGE_AUTH;
+    }
 
 
 }
