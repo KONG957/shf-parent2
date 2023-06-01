@@ -44,11 +44,17 @@
     <spring.security.version>5.2.7.RELEASE</spring.security.version>
     <thymeleaf-springsecurity5.version>3.0.4.RELEASE</thymeleaf-springsecurity5.version>
     <redis-session.version>1.3.5.RELEASE</redis-session.version>
+    <thymeleaf-springsecurity5.version>3.0.4.RELEASE</thymeleaf-springsecurity5.version>
   </properties>
 
   <!-- 依赖管理 -->
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.thymeleaf.extras</groupId>
+        <artifactId>thymeleaf-extras-springsecurity5</artifactId>
+        <version>${thymeleaf-springsecurity5.version}</version>
+      </dependency>
       <!--spring-session 同步-->
 
       <dependency>

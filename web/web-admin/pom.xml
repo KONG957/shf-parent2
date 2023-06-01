@@ -9,7 +9,12 @@
   <modelVersion>4.0.0</modelVersion>  
   <artifactId>web-admin</artifactId>  
   <packaging>war</packaging>  
-  <dependencies> 
+  <dependencies>
+    <!--用于springsecurity5标签-->
+    <dependency>
+      <groupId>org.thymeleaf.extras</groupId>
+      <artifactId>thymeleaf-extras-springsecurity5</artifactId>
+    </dependency>
     <dependency> 
       <groupId>com.atguigu</groupId>  
       <artifactId>common-util</artifactId>  
